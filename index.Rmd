@@ -128,19 +128,53 @@ kable_styling()
 ### Ejercicio 6 (15%) -Nota: Condición lógica-
 Con la función ```ggplot()``` del paquete [ggplot2](https://ggplot2.tidyverse.org/), genere un gráfico de barras que muestre la esperanza de vida de los países del continente asiático en los que esa esperanza de vida sea de al menos 80 años. El gráfico debe tener un título, los nombres (o códigos) de los países bajo cada barra, los valores sobre las barras y etiquetas para los ejes x e y.
 ```{r}
+# Se extraen las observaciones correspondientes a los países de Asia
+Paises_Asia = world[world$continent == "Asia" & world$lifeExp >= 80, ]
+Paises_Asia2 = na.omit(Paises_Asia)
+ggplot(Paises_Asia2, aes(x=reorder(name_long, -lifeExp), y=lifeExp)) +
+  ggtitle("Paises Asiaticos que superan la esperanza de vida mayor a 80 años") +
+  xlab("País") + 
+  ylab("Esperanza de Vida (Años)") +  
+  geom_col() +
+  geom_text(aes(label=(format(round(lifeExp,3)))), vjust=-0.3, size=2.5, )
 ```
 
 ### Ejercicio 7 (20%) -Filtrar la columna de continente-
 Con la función ```plot()``` del paquete [sf](https://cran.r-project.org/web/packages/sf/index.html), genere un [mapa de coropletas](https://en.wikipedia.org/wiki/Choropleth_map) con colores que reflejen la esperanza de vida de los países del continente llamado Oceanía. El mapa debe llevar un título.
 ```{r}
+# Países del continente Oceanía
+oceania_paises = world[world$continent == "Oceania", ]
+
+# Mapa de esperanza de vida de Oceanía
+plot(
+  oceania_paises["lifeExp"], 
+  main="Esperanza de Vida de los Países de Oceanía"
+)
 ```
 
 ### Ejercicio 8 (20%)
 Extraiga en un nuevo data frame los países de Centroamérica con esperanza de vida mayor o igual a 74 años y genere el mapa de coropletas, con su título correspondiente.
 ```{r}
+# Filtro para crear data frame con países de Centroamérica con esperanza de vida mayor a 74 años
+paises_ca = world[world$subregion == "Central America" & world$lifeExp >= 74, ]
+
+plot(
+  paises_ca["lifeExp"] , 
+  main="Esperanza de Vida mayor a 74 años de los Países de Centroamérica"
+)
 ```
 
 ### Ejercicio 9 (20%) - 2 mapas de poropletas 1) con el área 2)población-
 Extraiga en un nuevo data frame los países de América del Sur con área de al menos 2.5 millones de km2 o población de al menos 40 millones de personas y genere un mapa de coropletas para cada variable (i.e. área y población), con sus títulos correspondientes.
 ```{r}
+paises_saa = world[world$continent == "South America" & world$area_km2 >= 2500000, ]
+plot(
+  paises_saa["area_km2"] , 
+  main="Países de América del Sur con un área de al menos 2,5 millones de km2"
+)
+paises_sap = world[world$continent == "South America" & world$pop >= 40000000, ]
+plot(
+  paises_sap["pop"] , 
+  main="Países de América del Sur con una población mayor o igual a 40 millones de personas"
+)
 ```
