@@ -51,6 +51,8 @@ library(ggplot2)
 library(sf)
 # Paquete con conjuntos de datos geoespaciales
 library(spData)
+# Paquete para el manejo de datos
+library(dplyr)
 ```
 
 Realice los siguientes ejercicios de graficación y manejo de datos vectoriales en R (el valor porcentual de cada uno se muestra entre paréntesis).
@@ -167,14 +169,14 @@ plot(
 ### Ejercicio 9 (20%) - 2 mapas de poropletas 1) con el área 2)población-
 Extraiga en un nuevo data frame los países de América del Sur con área de al menos 2.5 millones de km2 o población de al menos 40 millones de personas y genere un mapa de coropletas para cada variable (i.e. área y población), con sus títulos correspondientes.
 ```{r}
-paises_saa = world[world$continent == "South America" & world$area_km2 >= 2500000, ]
+paises_sa <- world[world$subregion == "South America",] %>% 
+  filter(pop >= 40000000, area_km2 >= 2500000)
 plot(
-  paises_saa["area_km2"] , 
+  paises_sa["area_km2"] , 
   main="Países de América del Sur con un área de al menos 2,5 millones de km2"
 )
-paises_sap = world[world$continent == "South America" & world$pop >= 40000000, ]
 plot(
-  paises_sap["pop"] , 
+  paises_sa["pop"] , 
   main="Países de América del Sur con una población mayor o igual a 40 millones de personas"
 )
 ```
