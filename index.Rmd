@@ -183,7 +183,9 @@ ggplot(paises_sa, aes(fill=pop))+
   theme_bw()+
   theme(title =element_text(size=10, face='bold'))
 
-ggplot(paises_sa, aes(fill=area_km2))+
+paises_sa %>%
+  filter(name_long != "Colombia") %>%
+  ggplot(aes(fill=area_km2))+
   geom_sf()+
   geom_sf_label(aes(label=name_long))+
   scale_fill_gradient2(low = "orange", mid= "yellow", high = "green", name = "km2", labels = comma)+
