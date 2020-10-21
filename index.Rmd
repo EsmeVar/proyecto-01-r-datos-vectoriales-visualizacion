@@ -53,6 +53,8 @@ library(sf)
 library(spData)
 # Paquete para el manejo de datos
 library(dplyr)
+# Paquete de escalas
+library(scales)
 ```
 
 Realice los siguientes ejercicios de graficación y manejo de datos vectoriales en R (el valor porcentual de cada uno se muestra entre paréntesis).
@@ -169,14 +171,24 @@ plot(
 ### Ejercicio 9 (20%) - 2 mapas de poropletas 1) con el área 2)población-
 Extraiga en un nuevo data frame los países de América del Sur con área de al menos 2.5 millones de km2 o población de al menos 40 millones de personas y genere un mapa de coropletas para cada variable (i.e. área y población), con sus títulos correspondientes.
 ```{r}
-paises_sa <- world[world$subregion == "South America",] %>% 
-  filter(pop >= 40000000, area_km2 >= 2500000)
-plot(
-  paises_sa["area_km2"] , 
-  main="Países de América del Sur con un área de al menos 2,5 millones de km2"
-)
-plot(
-  paises_sa["pop"] , 
-  main="Países de América del Sur con una población mayor o igual a 40 millones de personas"
-)
+paises_sa <- world[world$subregion == "South America",] %>%
+  filter(pop >= 40000000 | area_km2 >= 2500000)
+
+ggplot(paises_sa, aes(fill=pop))+
+  geom_sf()+
+  geom_sf_label(aes(label=name_long))+
+  scale_fill_gradient2(low = "yellow", mid= "orange", high = "blue", name = "Habitantes", labels = comma)+
+  ggtitle("Países de América del Sur con una población mayor o igual a 40 millones de personas")+
+  xlab("")+ylab("")+
+  theme_bw()+
+  theme(title =element_text(size=10, face='bold'))
+
+ggplot(paises_sa, aes(fill=area_km2))+
+  geom_sf()+
+  geom_sf_label(aes(label=name_long))+
+  scale_fill_gradient2(low = "orange", mid= "yellow", high = "green", name = "km2", labels = comma)+
+  ggtitle("Países de América del Sur con un área de al menos 2,5 millones de km2")+
+  xlab("")+ylab("")+
+  theme_bw()+
+  theme(title =element_text(size=10, face='bold'))
 ```
